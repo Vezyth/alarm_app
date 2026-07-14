@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
     loadAlarms();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF0D1B2A),
@@ -79,7 +80,15 @@ class _HomePageState extends State<HomePage> {
                     });
                     await saveAlarms();
                   },
-                );
+                    onDismissed: (String id) async {
+                      setState(() {
+                        alarms.removeWhere((alarm) {
+                          return alarm.id == id;
+                        });
+                      });
+                      await saveAlarms(); 
+                    },
+                  );
               },
             ),
       floatingActionButton: FloatingActionButton(
